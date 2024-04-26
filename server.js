@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 const methodOverride = require('method-override')
 const port = 3000
+const Post = require('./models/post')
 
 //----------------------------Middleware------------------------------------------
 
@@ -22,22 +23,37 @@ mongoose.connection.on('connected', ()=>{
 //----------------------------Routes------------------------------------------------
 
 // get homepage
-app.get('/blog', (req, res)=>{
+app.get('/blog', async (req, res)=>{
+    const allPosts = await Post.find()
     res.render('index.ejs', {
-        title: "Nick's Blog 2: Homepage"
+        subtitle: "Home",
+        allPosts
     })
 })
 
 // get create page
 app.get('/blog/new', (req, res)=>{
+    res.render('new.ejs', {
+        subtitle: "Create"
+    })
 })
 
 // post input to db
-app.post('/blog', (req, res)=>{
+app.post('/blog', async (req, res)=>{
+    const post = await Post.create({
+        title: req.body['post-title'],
+        body: req.body['post-body']
+    })
+    res.redirect('/blog')
 })
 
 // get show page
-app.get('/blog/:id', (req, res)=>{
+app.get('/blog/:id', async (req, res)=>{
+    const post = await Post.findById(req.params.id)
+    res.render('show.ejs', {
+        subtitle: "Show",
+        post
+    })
 })
 
 // delete from show page
