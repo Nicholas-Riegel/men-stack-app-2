@@ -1,0 +1,18 @@
+<%- include('partials/head.ejs')%>
+<%- include('partials/nav.ejs')%>
+
+<h1>Edit page</h1>
+
+<form action="/blog/<%= post._id %>/?_method=PUT" method="POST">
+
+    <label for="post-title">Title</label><br>
+    <input type="text" name="post-title" id="post-title" value="<%= post.title %>"><br>
+
+    <label for="post-body">Post</label><br>
+    <textarea name="post-body" id="post-body" cols="30" rows="10"><%= post.body %></textarea><br>
+
+    <button type="submit">Submit</button>
+
+</form>
+
+<%- include('partials/foot.ejs')%>

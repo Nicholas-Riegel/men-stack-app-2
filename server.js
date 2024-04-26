@@ -57,15 +57,27 @@ app.get('/blog/:id', async (req, res)=>{
 })
 
 // delete from show page
-app.delete('/blog/:id', (req, res)=>{
+app.delete('/blog/:id', async (req, res)=>{
+    await Post.findByIdAndDelete(req.params.id)
+    res.redirect('/blog')
 })
 
 // get edit page
-app.get('/blog/:id/edit', (req, res)=>{
+app.get('/blog/:id/edit', async (req, res)=>{
+    const post = await Post.findById(req.params.id)
+    res.render('edit.ejs', {
+        subtitle: "Edit",
+        post
+    })
 })
 
 // put edit to db
-app.put('/blog/:id', (req, res)=>{
+app.put('/blog/:id', async (req, res)=>{
+    await Post.findByIdAndUpdate(req.params.id, {
+        title: req.body['post-title'],
+        body: req.body['post-body']
+    })
+    res.redirect(`/blog`)
 })
 
 //----------------------------Port--------------------------------------------------
